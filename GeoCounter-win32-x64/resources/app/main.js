@@ -10,7 +10,7 @@ function createWindow () {
     }
   });
 
-  win.loadFile('index.html');
+  win.loadFile(path.join(__dirname, 'frontend/dist/index.html'));
 
   // Uncomment this line if you want to open DevTools automatically
   // win.webContents.openDevTools();
