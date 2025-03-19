@@ -10,7 +10,9 @@ function createWindow () {
     }
   });
 
-  win.loadFile(path.join(__dirname, 'frontend/dist/index.html'));
+  win.loadURL('http://localhost:5173');
+
+
 
   // Uncomment this line if you want to open DevTools automatically
   // win.webContents.openDevTools();
