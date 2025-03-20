@@ -1,16 +1,20 @@
 {
   "name": "geocounter",
   "version": "1.0.0",
-  "description": "",
+  "description": "A powerful tool for geo-location counter",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager . GeoCounter --platform=win32 --arch=x64 --out=dist --overwrite",
+    "installer": "electron-installer-windows --src dist/GeoCounter-win32-x64/ --dest installers/",
+    "postinstall": "npm run package"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^35.0.1",
+    "electron-installer-windows": "^3.0.0",
     "electron-packager": "^17.1.2"
   },
   "dependencies": {
