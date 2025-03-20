@@ -1,0 +1,7 @@
+directories:
+  output: dist
+  buildResources: build
+win:
+  sign: false
+files: []
+electronVersion: 35.0.1
