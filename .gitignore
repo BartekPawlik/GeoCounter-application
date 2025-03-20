@@ -1,3 +1,5 @@
 GeoCounter-win32-x64/
 node_modules/
+dist/win-unpacked/resources/app.asar
+
 *.exe
