@@ -77,16 +77,29 @@ h1 {
   flex-direction: column;
 }
 
+.tab-container{
+display: flex;
+flex-direction: column;
+padding: 12px;
+cursor: pointer;
+font-weight: bold;
+color: #585555;
+transition: all 0.3s ease;
+border-radius: 5px;
+}
 .tab {
-  display: flex;
-  flex-direction: column;
-  padding: 12px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #585555;
-  transition: all 0.3s ease;
-  border-radius: 5px;
+display: flex;
+}
 
+.bul-button{
+  margin-top: 10px;
+}
+
+.deleteTab{
+  margin-top: 12px;
+  margin-right: 12px;
+  height: 25px;
+  width: 25px;
 }
 
 
@@ -106,6 +119,11 @@ h1 {
 .tab strong {
   color: crimson;
 }
+
+.input-error {
+  border: 1px solid red;
+}
+
 
 .tab:hover {
   background-color: #f0f0f0;
@@ -133,4 +151,28 @@ h1 {
 .tab.active {
   background-color: #e7e2e2;
   /* Przykład stylu dla aktywnej zakładki */
+}
+
+.add-tab-form {
+  display: flex;
+  gap: 5px;
+}
+
+.add-tab-form button{
+  margin: 0;
+}
+
+.add-tab-form .input-container{
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.add-tab-form .input-container input{
+  padding: 5px;
+
+}
+
+.add-tab-form .input-container small{
+  color: crimson;
+  font-size: 12px;
 }
