@@ -7,6 +7,9 @@ function TabList({
     setActiveTab,
     handleDeleteItem,
     isAddingTab,
+    tabvisible,
+    setTabVisible,
+    handleTabcard
   }) {
     return (
       <div className="tab-list">
@@ -18,6 +21,9 @@ function TabList({
             handleDeleteItem={handleDeleteItem}
             onClick={() => setActiveTab(tab.title)}
             isAddingTab={isAddingTab}
+            tabvisible={tabvisible}
+            setTabVisible={setTabVisible}
+            handleTabcard={handleTabcard}
           />
         ))}
       </div>
