@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
 import TabForm from "./TabForm";
@@ -19,6 +19,9 @@ function Tabs() {
   const [errorName, setErrorName] = useState(false);
   const [tabvisible, setTabVisible] = useState(false);
   const [handleTabcard, setHandleTabCard] = useState(null);
+  const [userData, setUserData] = useState(["user1", "User2", "User3"]);
+  const [newUser, setNewUser] = useState(null);
+  const [userActive, setUserActive] = useState(false);
 
   function handleDeleteItem(id, title) {
     setDeleteId(id);
@@ -50,22 +53,63 @@ function Tabs() {
     setTabContents(updatedTabs);
     localStorage.setItem("tabs", JSON.stringify(updatedTabs));
   }
+  function addNewUser() {
+    setUserActive((prev) => !prev);
+    setIsAddingTab(false);
+    setIsConfirmDelete(false);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" && newUser.trim() !== "") {
+      setUserData([...userData, newUser.trim()]);
+      setNewUser("");
+    }
+  }
 
   return (
     <div className="tabs-container">
       {!tabvisible && (
-        <button
-          onClick={() => {
-            setIsAddingTab(true);
-            setIsConfirmDelete(false);
-          }}
-        >
-          Nowy dokument
-        </button>
+        <div className="users-container">
+          <div className="button-container">
+            <button onClick={() => addNewUser()}>users</button>
+          </div>
+          {userActive && (
+            <div className="user-container">
+              <div className="add-user-container">
+                <h4>Lista users</h4>
+                <input
+                  value={newUser}
+                  placeholder="Dodaj"
+                  onChange={(e) => setNewUser(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <div className="user-list">
+                {userData.map((item, index) => (
+                  <p key={index}>{item}</p>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
-      {isAddingTab && !tabvisible && (
+      {!tabvisible && !userActive && (
+        <div className="button-container">
+          <button
+            onClick={() => {
+              setIsAddingTab(true);
+              setIsConfirmDelete(false);
+            }}
+          >
+            Nowy dokument
+          </button>
+        </div>
+      )}
+
+      {isAddingTab && !tabvisible && !userActive && (
         <TabForm
+          userData={userData}
           setErrorName={setErrorName}
           tabContents={tabContents}
           addNewTab={addNewTab}
@@ -73,7 +117,7 @@ function Tabs() {
           errorName={errorName}
         />
       )}
-      {!tabvisible && (
+      {!tabvisible && !userActive && (
         <TabList
           tabContents={tabContents}
           setActiveTab={setActiveTab}
@@ -86,20 +130,18 @@ function Tabs() {
         />
       )}
 
-      {isConfirmDelete && !tabvisible && (
+      {isConfirmDelete && !tabvisible && !userActive && (
         <ConfirmationDialog
           onConfirm={confirmDelete}
           onCancel={cancleDelete}
           deleteTitle={deleteTitle}
         />
       )}
-      {tabvisible && (
+      {tabvisible && !userActive && (
         <TabPanel setTabVisible={setTabVisible} handleTabcard={handleTabcard} />
       )}
     </div>
   );
 }
-
-
 
 export default Tabs;

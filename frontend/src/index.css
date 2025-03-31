@@ -57,7 +57,7 @@ h1 {
 }
 
 
-.panel-tab button{
+.panel-tab button {
   margin-bottom: 10px;
   padding: 5px;
   background-color: #333;
@@ -68,9 +68,10 @@ h1 {
   border: none;
 }
 
-.panel-tab button:hover{
+.panel-tab button:hover {
   color: crimson;
 }
+
 .tabs-container {
   margin-top: 50px;
   display: flex;
@@ -78,25 +79,26 @@ h1 {
   position: relative;
 }
 
-.tab-container{
-display: flex;
-flex-direction: column;
-padding: 12px;
-cursor: pointer;
-font-weight: bold;
-color: #585555;
-transition: all 0.3s ease;
-border-radius: 5px;
-}
-.tab {
-display: flex;
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #585555;
+  transition: all 0.3s ease;
+  border-radius: 5px;
 }
 
-.bul-button{
+.tab {
+  display: flex;
+}
+
+.bul-button {
   margin-top: 10px;
 }
 
-.deleteTab{
+.deleteTab {
   margin-top: 12px;
   margin-right: 12px;
   height: 25px;
@@ -151,7 +153,6 @@ display: flex;
 
 .tab.active {
   background-color: #e7e2e2;
-  /* Przykład stylu dla aktywnej zakładki */
 }
 
 .add-tab-form {
@@ -159,31 +160,40 @@ display: flex;
   gap: 5px;
 }
 
-.add-tab-form button{
+.add-tab-form button {
   margin: 0;
 }
 
-.add-tab-form .input-container{
+.button-container {
+  max-width: 150px;
+}
+
+.add-tab-form .input-container {
   display: flex;
   flex-direction: column-reverse;
 }
 
-.add-tab-form .input-container input{
+.add-tab-form .input-container input {
   padding: 5px;
+}
+
+.add-tab-form .input-container select {
+  padding: 5px;
+  width: 120px;
 
 }
 
-.add-tab-form .input-container small{
+.add-tab-form .input-container small {
   color: crimson;
   font-size: 12px;
 }
 
-.confirmation-dialog{
+.confirmation-dialog {
   position: absolute;
   right: -280px;
 }
 
-.confirmation-dialog .dialog-box{
+.confirmation-dialog .dialog-box {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,21 +204,21 @@ display: flex;
   border-radius: 10px;
 }
 
-.confirmation-dialog .dialog-box p{
+.confirmation-dialog .dialog-box p {
   font-weight: 700;
   font-size: 14px;
 }
 
-.confirmation-dialog .dialog-box span{
+.confirmation-dialog .dialog-box span {
   color: crimson;
 }
 
-.confirmation-dialog  .dialog-buttons{
+.confirmation-dialog .dialog-buttons {
   display: flex;
   gap: 10px;
 }
 
-.confirmation-dialog  .dialog-buttons button{
+.confirmation-dialog .dialog-buttons button {
   margin: 0;
 }
 
@@ -216,19 +226,18 @@ display: flex;
 /* Tab */
 
 
-.tab-panel-container{
+.tab-panel-container {
   display: flex;
 }
 
-.measuring-container{
+.measuring-container {
   margin-top: 50px;
-  background-color: rgb(124, 103, 103);
   width: 200px;
   height: 600px;
   margin-left: 20px;
 }
 
-.tab-item-info{
+.tab-item-info {
   margin-top: 50px;
   margin-left: 100px;
   display: flex;
@@ -236,23 +245,23 @@ display: flex;
   gap: 20px;
 }
 
-.tab-item-info .tab-name{
+.tab-item-info {
   display: flex;
   align-items: flex-end;
   gap: 10px;
 }
 
-.tab-item-info .tab-name p{
+.tab-item-info p {
   font-weight: 600;
   color: #0d459b;
 
 }
 
-.tab-item-info .tab-name h4{
-  font-size: 20px;
+.tab-item-info h4 {
+  font-size: 18px;
 }
 
-.custom-file-upload{
+.custom-file-upload {
   display: flex;
   background: #fafafa;
   justify-content: center;
@@ -264,11 +273,73 @@ display: flex;
 }
 
 
-.custom-file-upload:hover{
+.custom-file-upload:hover {
   color: crimson;
 }
 
-.tab-item .inputs-container{
+.tab-item .inputs-container {
   margin-left: 100px;
   margin-top: 100px;
+}
+
+.comparisons {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comparisons .item {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.comparisons .item:hover {
+  background-color: #f0f0f0;
+}
+
+.users-container .user-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.users-container .add-user-container {
+  display: flex;
+  gap: 10px;
+}
+
+.users-container .add-user-container input {
+  padding: 0 5px;
+  width: 150px;
+  border-radius: 5px;
+  border: none;
+  background-color: #ece8e8;
+  margin-left: 15px;
+}
+
+.users-container .add-user-container input:focus {
+outline: none;
+}
+
+.add-user-container {
+  background-color: #ccc8c8;
+}
+
+.user-container .user-list{
+display: flex;
+flex-direction: column;
+gap: 5px;
+background-color: #b4b7b9;
+width: 100px;
+padding: 10px 10px ;
+border-radius: 10px;
+}
+
+.user-container .user-list p{
+  display: flex;
+  font-weight: 600;
 }

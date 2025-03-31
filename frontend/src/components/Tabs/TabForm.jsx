@@ -5,6 +5,7 @@ function TabForm({
   setErrorName,
   tabContents,
   errorName,
+  userData,
 }) {
   const [newTab, setNewTab] = useState({
     title: "",
@@ -56,14 +57,23 @@ function TabForm({
       </div>
 
       <div className="input-container">
-        <input
+        <select
           type="text"
           className={errors.value ? "input-error" : ""}
           value={newTab.value}
           placeholder="Użytkownik"
           onChange={(e) => setNewTab({ ...newTab, value: e.target.value })}
-        />
-        {errors.value && <small>Użytkownik jest wymagany</small>}
+        >
+          <option value="" disabled>
+            użytkownik
+          </option>
+          {userData.map((user, index) => (
+            <option key={index} value={user}>
+              {user}
+            </option>
+          ))}
+          {errors.value && <small>Użytkownik jest wymagany</small>}
+        </select>
       </div>
       <div className="input-container">
         <input

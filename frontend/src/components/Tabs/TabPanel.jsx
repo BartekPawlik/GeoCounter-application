@@ -5,7 +5,6 @@ function TabPanel({ setTabVisible, handleTabcard }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [measurmentBase, setMeasurmentBase] = useState(null);
   const [comparisons, setComparisons] = useState([]);
-  const [selectTab, setSelectTab] = useState(null);
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -30,9 +29,26 @@ function TabPanel({ setTabVisible, handleTabcard }) {
             style={{ display: "none" }}
           />
           <label htmlFor="fileUpload" className="custom-file-upload">
-            Porównaj Pomiar
+            Dodaj Pomiar
           </label>
         </div>
+        {comparisons && (
+          <div className="comparisons">
+            {comparisons.map((item, index) => (
+              <div className="item" key={index}>
+                <h4>
+                  {index === 0 ? "Pomiar bazowy" : `Pomiar ${index + 1}`}:
+                </h4>
+                <p>
+                  B = ({item.x2}, {item.y2})
+                </p>
+                <p>Odległość od bazy: {item.distance.toFixed(2)}</p>
+                <p>Data: {item.date.split(",")[0]}</p>
+                <p>Godzina: {item.date.split(",")[1]}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="tab-item">
@@ -48,7 +64,9 @@ function TabPanel({ setTabVisible, handleTabcard }) {
 
           <h4>Pomiar bazowy:</h4>
           {measurmentBase ? (
-            <p>A = ({measurmentBase.x1}, {measurmentBase.y1})</p>
+            <p>
+              A = ({measurmentBase.x1}, {measurmentBase.y1})
+            </p>
           ) : (
             <p>brak danych</p>
           )}
@@ -60,22 +78,17 @@ function TabPanel({ setTabVisible, handleTabcard }) {
           setMeasurmentBase={setMeasurmentBase}
           measurmentBase={measurmentBase}
         />
-
-        <div className="comparisons">
-          {comparisons.map((item, index) => (
-            <div key={index}>
-              <h4>Pomiar {index + 1}:</h4>
-              <p>B = ({item.x2}, {item.y2})</p>
-              <p>Odległość od bazy: {item.distance.toFixed(2)}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
 }
 
-function TabInputs({ selectedFile, setComparisons, setMeasurmentBase, measurmentBase }) {
+function TabInputs({
+  selectedFile,
+  setComparisons,
+  setMeasurmentBase,
+  measurmentBase,
+}) {
   useEffect(() => {
     if (!selectedFile) return;
 
@@ -92,7 +105,7 @@ function TabInputs({ selectedFile, setComparisons, setMeasurmentBase, measurment
           y1: parseFloat(match[2]),
           x2: parseFloat(match[3]),
           y2: parseFloat(match[4]),
-          date: new Date().toLocaleDateString(),
+          date: new Date().toLocaleString("pl-PL", { hour12: false }),
         };
 
         if (!measurmentBase) {
@@ -100,7 +113,7 @@ function TabInputs({ selectedFile, setComparisons, setMeasurmentBase, measurment
         } else {
           const distance = Math.sqrt(
             Math.pow(newMeasurment.x2 - measurmentBase.x1, 2) +
-            Math.pow(newMeasurment.y2 - measurmentBase.y1, 2)
+              Math.pow(newMeasurment.y2 - measurmentBase.y1, 2)
           );
 
           setComparisons((prev) => [...prev, { ...newMeasurment, distance }]);
