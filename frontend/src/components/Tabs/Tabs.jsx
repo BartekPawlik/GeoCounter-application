@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, {  useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
 import TabForm from "./TabForm";
@@ -19,8 +19,10 @@ function Tabs() {
   const [errorName, setErrorName] = useState(false);
   const [tabvisible, setTabVisible] = useState(false);
   const [handleTabcard, setHandleTabCard] = useState(null);
-  const [userData, setUserData] = useState(["user1", "User2", "User3"]);
-  const [newUser, setNewUser] = useState(null);
+  const [userData, setUserData] = useState([
+
+  ]);
+  const [newUser, setNewUser] = useState("");
   const [userActive, setUserActive] = useState(false);
 
   function handleDeleteItem(id, title) {
@@ -59,9 +61,14 @@ function Tabs() {
     setIsConfirmDelete(false);
   }
 
+  function deleteUsers(id) {
+    const updateUsers = userData.filter((user) => user.id !== id);
+    setUserData(updateUsers);
+  }
+
   function handleKeyDown(event) {
     if (event.key === "Enter" && newUser.trim() !== "") {
-      setUserData([...userData, newUser.trim()]);
+      setUserData([...userData, { id: uuidv4(), name: newUser.trim()}]);
       setNewUser("");
     }
   }
@@ -69,29 +76,15 @@ function Tabs() {
   return (
     <div className="tabs-container">
       {!tabvisible && (
-        <div className="users-container">
-          <div className="button-container">
-            <button onClick={() => addNewUser()}>users</button>
-          </div>
-          {userActive && (
-            <div className="user-container">
-              <div className="add-user-container">
-                <h4>Lista users</h4>
-                <input
-                  value={newUser}
-                  placeholder="Dodaj"
-                  onChange={(e) => setNewUser(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-              <div className="user-list">
-                {userData.map((item, index) => (
-                  <p key={index}>{item}</p>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <UserPanel
+          addNewUser={addNewUser}
+          handleKeyDown={handleKeyDown}
+          setNewUser={setNewUser}
+          userActive={userActive}
+          newUser={newUser}
+          userData={userData}
+          deleteUsers={deleteUsers}
+        />
       )}
 
       {!tabvisible && !userActive && (
@@ -145,3 +138,42 @@ function Tabs() {
 }
 
 export default Tabs;
+
+function UserPanel({
+  addNewUser,
+  handleKeyDown,
+  setNewUser,
+  userActive,
+  newUser,
+  userData,
+  deleteUsers,
+}) {
+  return (
+    <div className="users-container">
+      <div className="button-container">
+        <button onClick={addNewUser}>users</button>
+      </div>
+      {userActive && (
+        <div className="user-container">
+          <div className="add-user-container">
+            <h4>Lista</h4>
+            <input
+              value={newUser}
+              placeholder="Dodaj"
+              onChange={(e) => setNewUser(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+          <div className="user-list">
+            {userData.map((item) => (
+              <div key={item.id}  className="user-container">
+                <p>{item.name}</p>
+                <button onClick={() => deleteUsers(item.id)}>x</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

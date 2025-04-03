@@ -69,7 +69,7 @@ function TabForm({
           </option>
           {userData.map((user, index) => (
             <option key={index} value={user}>
-              {user}
+              {user.name}
             </option>
           ))}
           {errors.value && <small>Użytkownik jest wymagany</small>}

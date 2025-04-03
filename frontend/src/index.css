@@ -322,24 +322,42 @@ h1 {
 }
 
 .users-container .add-user-container input:focus {
-outline: none;
+  outline: none;
 }
 
 .add-user-container {
   background-color: #ccc8c8;
 }
 
-.user-container .user-list{
-display: flex;
-flex-direction: column;
-gap: 5px;
-background-color: #b4b7b9;
-width: 100px;
-padding: 10px 10px ;
-border-radius: 10px;
+.user-container .user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: #b4b7b9;
+  width: 100px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  min-height: 100px;
 }
 
-.user-container .user-list p{
+.user-container .user-list p {
   display: flex;
   font-weight: 600;
+}
+
+
+.user-list .user-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.user-list .user-container button{
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
