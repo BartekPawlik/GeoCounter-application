@@ -21,7 +21,7 @@ function ConfirmationDialog({ onConfirm, onCancel, deleteTitle }) {
       <div className="confirmation-dialog">
         <div className="dialog-box">
           <p>
-            Czy na penwo chcesz usunąć <span>{deleteTitle}</span> ?
+            <span>{deleteTitle}</span>
           </p>
           <div className="dialog-buttons">
             <button onClick={onConfirm}>Tak</button>

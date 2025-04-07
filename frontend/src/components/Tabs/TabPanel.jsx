@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Tabs from "./Tabs";
+import ConfirmationDialog from "../UI/ConfirmationDialog";
 
-function TabPanel({ setTabVisible, handleTabcard }) {
+function TabPanel({
+  setTabVisible,
+  handleTabcard,
+  measureTabData,
+  measureState,
+  handleExoprt,
+  id,
+  deleteTitle,
+}) {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [measurmentBase, setMeasurmentBase] = useState(null);
-  const [comparisons, setComparisons] = useState([]);
+
+  const measurmentBase = measureState?.measurmentBase || null;
+  const comparisons = measureState?.comparisons || null;
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -17,6 +27,7 @@ function TabPanel({ setTabVisible, handleTabcard }) {
     <div className="tab-panel-container">
       <div className="return-container">
         <button onClick={() => setTabVisible(false)}>Powrót</button>
+        <button onClick={() => setShowArchiveConfirm(true)}>Archiwizuj</button>
       </div>
 
       <div className="measuring-container">
@@ -32,7 +43,7 @@ function TabPanel({ setTabVisible, handleTabcard }) {
             Dodaj Pomiar
           </label>
         </div>
-        {comparisons && (
+        {comparisons && comparisons.length > 0 && (
           <div className="comparisons">
             {comparisons.map((item, index) => (
               <div className="item" key={index}>
@@ -74,10 +85,21 @@ function TabPanel({ setTabVisible, handleTabcard }) {
 
         <TabInputs
           selectedFile={selectedFile}
-          setComparisons={setComparisons}
-          setMeasurmentBase={setMeasurmentBase}
           measurmentBase={measurmentBase}
+          comparisons={comparisons}
+          measureTabData={measureTabData}
         />
+
+        {showArchiveConfirm && (
+          <ConfirmationDialog
+            onConfirm={() => {
+              handleExoprt(id); // <-- Wywołujemy tylko, jeśli user potwierdzi
+              setShowArchiveConfirm(false);
+            }}
+            onCancel={() => setShowArchiveConfirm(false)}
+            deleteTitle={`Czy na pewno chcesz zarchiwizować dokument?`}
+          />
+        )}
       </div>
     </div>
   );
@@ -85,9 +107,9 @@ function TabPanel({ setTabVisible, handleTabcard }) {
 
 function TabInputs({
   selectedFile,
-  setComparisons,
-  setMeasurmentBase,
   measurmentBase,
+  comparisons,
+  measureTabData,
 }) {
   useEffect(() => {
     if (!selectedFile) return;
@@ -109,14 +131,15 @@ function TabInputs({
         };
 
         if (!measurmentBase) {
-          setMeasurmentBase(newMeasurment);
+          measureTabData({ measurmentBase: newMeasurment, comparisons: [] });
         } else {
           const distance = Math.sqrt(
             Math.pow(newMeasurment.x2 - measurmentBase.x1, 2) +
               Math.pow(newMeasurment.y2 - measurmentBase.y1, 2)
           );
-
-          setComparisons((prev) => [...prev, { ...newMeasurment, distance }]);
+          measureTabData({
+            comparisons: [...comparisons, { ...newMeasurment, distance }],
+          });
         }
       } else {
         console.log("Brak pomiarów");
@@ -124,7 +147,7 @@ function TabInputs({
     };
 
     reader.readAsText(selectedFile);
-  }, [selectedFile, setComparisons, setMeasurmentBase, measurmentBase]);
+  }, [selectedFile]);
 
   return null;
 }

@@ -68,7 +68,7 @@ function TabForm({
             użytkownik
           </option>
           {userData.map((user, index) => (
-            <option key={index} value={user}>
+            <option key={index} value={user.name}>
               {user.name}
             </option>
           ))}

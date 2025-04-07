@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron');
+import { readUsers, writeUsers } from './fsUserHandler.js';
 const path = require('path');
 function createWindow () {
   const win = new BrowserWindow({
