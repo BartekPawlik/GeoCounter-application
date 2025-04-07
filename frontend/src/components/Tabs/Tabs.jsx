@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
 import TabForm from "./TabForm";
@@ -37,6 +37,15 @@ function Tabs() {
       },
     }));
   }
+// Load users on mount
+
+useEffect(() => {
+  const fetchUsers = async () => {
+    const users = await window.electron.getUsers();
+    setUserData(users);
+  };
+  fetchUsers();
+}, []);
 
   function handleDeleteItem(id, title) {
     setDeleteId(id);
@@ -75,19 +84,21 @@ function Tabs() {
     setIsConfirmDelete(false);
   }
 
-  function deleteUsers(id) {
-    const updateUsers = userData.filter((user) => user.id !== id);
-    localStorage.setItem("users", JSON.stringify(userData));
-    setUserData(updateUsers);
-  }
+  const deleteUsers = async (id) => {
+    await window.electron.deleteUser(id);
+    const updated = await window.electron.getUsers();
+    setUserData(updated);
+  };
 
-  function handleKeyDown(event) {
-    if (event.key === "Enter" && newUser.trim() !== "") {
-      setUserData([...userData, { id: uuidv4(), name: newUser.trim() }]);
-      localStorage.setItem("users", JSON.stringify(userData));
-      setNewUser("");
+  const handleKeyDown = async (e) => {
+    if (e.key === "Enter" && newUser.trim() !== "") {
+      const newUserData = { id: uuidv4(), name: newUser.trim() };
+      await window.electron.addUser(newUserData);
+      const updated = await window.electron.getUsers();
+      setUserData(updated);
+      setNewUser(""); // Clear input
     }
-  }
+  };
 
   function handleExport(data) {
     console.log(archive);

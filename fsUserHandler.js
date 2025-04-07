@@ -1,18 +1,29 @@
 // fsUserHandler.js
-import fs from "fs";
-import path from "path";
 
-// Update the path to point to the data directory
-const filePath = path.join(__dirname, "..", "data","users", "userData.json");
+const fs = require("fs");
+const path = require("path");
+
+const dataPath = path.join(__dirname, 'userData', "userData.json");
 
 function readUsers() {
-  if (!fs.existsSync(filePath)) return [];
-  const data = fs.readFileSync(filePath, "utf8");
-  return JSON.parse(data || "[]");
+  try {
+    const data = fs.readFileSync(dataPath, "utf-8");
+    return JSON.parse(data);
+  } catch (err) {
+    console.error("Error reading users:", err);
+    return [];
+  }
 }
 
 function writeUsers(users) {
-  fs.writeFileSync(filePath, JSON.stringify(users, null, 2), "utf8");
+  try {
+    fs.writeFileSync(dataPath, JSON.stringify(users, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Error writing users:", err);
+  }
 }
 
-export { readUsers, writeUsers };
+module.exports = {
+  readUsers,
+  writeUsers,
+};
