@@ -8,11 +8,15 @@ import UserPanel from "./UserPanel";
 import Archive from "./Archive";
 
 function Tabs() {
-  const [tabContents, setTabContents] = useState(() => {
-    const storedTabs = localStorage.getItem("tabs");
+  const [tabContents, setTabContents] = useState([]);
+  useEffect(() => {
+    async function fetchTabs() {
+      const tabs = await window.electron.getTabs();
+      setTabContents(tabs);
+    }
 
-    return storedTabs ? JSON.parse(storedTabs) : [];
-  });
+    fetchTabs();
+  }, []);
   const [activeTab, setActiveTab] = useState(null);
   const [isAddingTab, setIsAddingTab] = useState(false);
   const [isConfirmDelete, setIsConfirmDelete] = useState(false);
@@ -28,6 +32,8 @@ function Tabs() {
   const [archive, setArchive] = useState([]);
   const [archiveVisible, setArchiveVisible] = useState(false);
 
+
+
   function updateTabData(tabId, data) {
     setMeasureData((prev) => ({
       ...prev,
@@ -37,7 +43,9 @@ function Tabs() {
       },
     }));
   }
-// Load users on mount
+
+
+
 
 useEffect(() => {
   const fetchUsers = async () => {
@@ -65,10 +73,11 @@ useEffect(() => {
   };
 
   function addNewTab(newTab) {
+    const newId = uuidv4();
     const updatedTabs = [
       ...tabContents,
       {
-        id: uuidv4(),
+        id: newId,
         title: newTab.title,
         value: newTab.value,
         date: newTab.date,
@@ -76,8 +85,22 @@ useEffect(() => {
       },
     ];
     setTabContents(updatedTabs);
-    localStorage.setItem("tabs", JSON.stringify(updatedTabs));
+
+
+    window.electron.createFolderAndFile({
+      id: newId,
+      title: newTab.title,
+      value: newTab.value,
+      date: newTab.date,
+    }).then(response => {
+      if (response.success) {
+        setTabContents(response.tabs);
+      } else {
+        console.error('Failed to create folder and file');
+      }
+    });
   }
+
   function addNewUser() {
     setUserActive((prev) => !prev);
     setIsAddingTab(false);
@@ -96,7 +119,7 @@ useEffect(() => {
       await window.electron.addUser(newUserData);
       const updated = await window.electron.getUsers();
       setUserData(updated);
-      setNewUser(""); // Clear input
+      setNewUser(""); 
     }
   };
 
