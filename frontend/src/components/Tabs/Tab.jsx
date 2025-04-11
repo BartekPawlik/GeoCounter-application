@@ -11,7 +11,7 @@ function Tab({
 }) {
   return (
     <div className={`tab ${isActive ? "active" : ""}`} onClick={onClick}>
-      <div className="tab-container">
+      <div data-id={tab.id} className="tab-container">
         <h3>
           <span>Nazwa: </span>
           {tab.title}

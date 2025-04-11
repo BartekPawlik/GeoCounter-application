@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 function TabForm({
   addNewTab,
   setIsAddingTab,
@@ -11,6 +12,7 @@ function TabForm({
     title: "",
     value: "",
     date: "",
+    id: uuidv4(),
   });
   const [errors, setErrors] = useState({
     title: false,
@@ -36,7 +38,7 @@ function TabForm({
       return;
     }
     addNewTab(newTab);
-    setNewTab({ title: "", value: "", date: "" });
+    setNewTab({ title: "", value: "", date: "", id: uuidv4() });
     setIsAddingTab(false);
     setErrors({ title: false, value: false, date: false });
     setErrorName(false);
@@ -89,7 +91,7 @@ function TabForm({
         onClick={() => {
           setIsAddingTab(false);
           setErrors({ title: false, value: false, date: false });
-          setNewTab({ title: "", value: "", date: "" });
+          setNewTab({ title: "", value: "", date: "", id: uuidv4() });
         }}
       >
         Anuluj

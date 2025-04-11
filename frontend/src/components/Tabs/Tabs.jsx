@@ -61,23 +61,24 @@ useEffect(() => {
     setDeleteTitle(title);
   }
 
-  const confirmDelete = () => {
-    const updatedTabs = tabContents.filter((tab) => tab.id !== deleteid);
-    setTabContents(updatedTabs);
-    localStorage.setItem("tabs", JSON.stringify(updatedTabs));
-    setIsConfirmDelete(false);
-  };
 
-  const cancleDelete = () => {
-    setIsConfirmDelete(false);
-  };
+    const confirmDelete = async () => {
+      if (deleteid) {
+      console.log(deleteid)
+        await window.electron.deleteTab(deleteid);
+        const updated = await window.electron.getTabs();
+        setTabContents(updated);
+        setIsConfirmDelete(false);
+      }
+    };
+
+
 
   function addNewTab(newTab) {
-    const newId = uuidv4();
     const updatedTabs = [
       ...tabContents,
       {
-        id: newId,
+        id: newTab.id,
         title: newTab.title,
         value: newTab.value,
         date: newTab.date,
@@ -88,7 +89,7 @@ useEffect(() => {
 
 
     window.electron.createFolderAndFile({
-      id: newId,
+      id: newTab.id,
       title: newTab.title,
       value: newTab.value,
       date: newTab.date,
@@ -119,7 +120,7 @@ useEffect(() => {
       await window.electron.addUser(newUserData);
       const updated = await window.electron.getUsers();
       setUserData(updated);
-      setNewUser(""); 
+      setNewUser("");
     }
   };
 
@@ -206,7 +207,7 @@ useEffect(() => {
       {isConfirmDelete && !tabvisible && !userActive && !archiveVisible && (
         <ConfirmationDialog
           onConfirm={confirmDelete}
-          onCancel={cancleDelete}
+          onCancel={confirmDelete}
           deleteTitle={`Czy na pewno chcesz usunąć dokument "${deleteTitle}"?`}
         />
       )}
