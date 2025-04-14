@@ -8,7 +8,6 @@ function TabPanel({
   measureState,
   handleExoprt,
   id,
-  deleteTitle,
 }) {
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -22,6 +21,7 @@ function TabPanel({
       setSelectedFile(file);
     }
   }
+
 
   return (
     <div className="tab-panel-container">
@@ -88,6 +88,7 @@ function TabPanel({
           measurmentBase={measurmentBase}
           comparisons={comparisons}
           measureTabData={measureTabData}
+          id={id}
         />
 
         {showArchiveConfirm && (
@@ -110,8 +111,12 @@ function TabInputs({
   measurmentBase,
   comparisons,
   measureTabData,
+  id,
 }) {
   useEffect(() => {
+    if (!id) {
+      console.log("ID is missing")
+    }
     if (!selectedFile) return;
 
     const reader = new FileReader();

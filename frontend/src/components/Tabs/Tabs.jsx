@@ -35,14 +35,41 @@ function Tabs() {
 
 
   function updateTabData(tabId, data) {
-    setMeasureData((prev) => ({
-      ...prev,
-      [tabId]: {
+    console.log("własnie powstał nowy pomiar");
+
+    setMeasureData((prev) => {
+      const updatedTab = {
         ...prev[tabId],
         ...data,
-      },
-    }));
+      };
+
+      // Extracting latest measurement data
+      const measurementBase = updatedTab.measurmentBase;
+      const comparisons = updatedTab.comparisons || [];
+
+      // Send to Electron backend only if there is a new measurement
+      if (comparisons.length > 0) {
+        const lastComparison = comparisons[comparisons.length - 1];
+
+
+        window.electron.invoke("addMeasure", {
+          id: handleTabcard.id,
+          id_measure: uuidv4(),
+          x1: measurementBase.x1,
+          y1: measurementBase.y1,
+          x2: lastComparison.x2,
+          y2: lastComparison.y2,
+          date: lastComparison.date,
+        });
+      }
+
+      return {
+        ...prev,
+        [tabId]: updatedTab,
+      };
+    });
   }
+
 
 
 

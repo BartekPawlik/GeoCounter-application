@@ -115,7 +115,6 @@ function createWindow() {
   // delete folder
 
   ipcMain.handle("delete-tabs", async (event, tabId) => {
-    console.log("to jest tab id", tabId);
     try {
       const tabsDir = path.join(__dirname, "tabs");
       const folderNames = fs.readdirSync(tabsDir);
@@ -165,6 +164,57 @@ function createWindow() {
       console.error("Error deleting tab:", error);
     }
   });
+
+
+
+  ipcMain.handle("addMeasure", async (event, measureData) => {
+    try {
+      const basePath = path.join(__dirname, "tabs");
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
+
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+
+        const folderPath = path.join(basePath, folder.name);
+        const files = fs.readdirSync(folderPath);
+
+        for (const file of files) {
+          const filePath = path.join(folderPath, file);
+
+          if (file.endsWith(".txt")) {
+            const content = fs.readFileSync(filePath, "utf-8");
+
+            if (content.includes(`Id: ${measureData.id}`)) {
+              console.log(measureData)
+              const measurementEntry = [
+                "\n--- New Measurement ---",
+                `Id: ${JSON.stringify(measureData.id_measures, null, 2)}`,
+                `data: ${measureData.date}`
+                `x1: ${measureData.x1}`,
+                `x2: ${measureData.x2}`,
+                `y1: ${measureData.y1}`,
+                `y2: ${measureData.y2}`
+              ].join("\n");
+
+
+              fs.appendFileSync(filePath, measurementEntry);
+              console.log(`Measurement added to ${filePath}`);
+
+              return { success: true, message: `Measurement added to file: ${file}` };
+            }
+          }
+        }
+      }
+
+      return { success: false, message: "ID not found in any folder." };
+    } catch (err) {
+      console.error("Error in addMeasure:", err);
+      return { success: false, message: err.message };
+    }
+  });
+
+
+
 
 
   // Uncomment this line if you want to open DevTools automatically
