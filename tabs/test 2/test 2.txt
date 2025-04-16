@@ -1,0 +1,20 @@
+Tab: test 2
+Date: 2025-04-08
+User: siemano
+Id: 78a7af29-fab9-46ee-9aff-b7d8dc24b342
+--- New Measurement ---
+Idm: 0ab79e07-1e97-4d63-9faf-fd056fc60ac8
+Id: 78a7af29-fab9-46ee-9aff-b7d8dc24b342
+x1: -1.5
+x2: 6.1
+y1: 2.2
+y2: -2.8
+data: 16.04.2025, 20:45:39
+--- New Measurement ---
+Idm: 0363ebe4-2425-40ba-84fe-210aa712fcde
+Id: 78a7af29-fab9-46ee-9aff-b7d8dc24b342
+x1: -1.5
+x2: 6.1
+y1: 2.2
+y2: -2.8
+data: 16.04.2025, 20:45:39

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
 
+
+
 function TabPanel({
   setTabVisible,
   handleTabcard,
@@ -10,10 +12,30 @@ function TabPanel({
   id,
 }) {
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [fileMeasurments, setFileMeasurements] = useState([]);
   const measurmentBase = measureState?.measurmentBase || null;
   const comparisons = measureState?.comparisons || null;
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
+
+
+
+
+
+    useEffect(() => {
+      if (id) {
+        window.electron.invoke("getMeasurementsFromFile", id).then((response) => {
+          console.log(id)
+          if (response.success) {
+            console.log(response)
+            setFileMeasurements(response.data);
+            console.log(response.data)
+          } else {
+            console.warn(response.message);
+          }
+        });
+      }
+    }, [id]);
+
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -21,7 +43,6 @@ function TabPanel({
       setSelectedFile(file);
     }
   }
-
 
   return (
     <div className="tab-panel-container">
@@ -43,19 +64,21 @@ function TabPanel({
             Dodaj Pomiar
           </label>
         </div>
-        {comparisons && comparisons.length > 0 && (
+        {fileMeasurments.length > 0 && (
           <div className="comparisons">
-            {comparisons.map((item, index) => (
+            {fileMeasurments.map((item, index) => (
               <div className="item" key={index}>
                 <h4>
                   {index === 0 ? "Pomiar bazowy" : `Pomiar ${index + 1}`}:
                 </h4>
                 <p>
+                  A = ({item.x1}, {item.y1})
+                </p>
+                <p>
                   B = ({item.x2}, {item.y2})
                 </p>
-                <p>Odległość od bazy: {item.distance.toFixed(2)}</p>
-                <p>Data: {item.date.split(",")[0]}</p>
-                <p>Godzina: {item.date.split(",")[1]}</p>
+                {/* <p>Odległość od bazy: {item.id}</p> */}
+                <p>Data: {item.date}</p>
               </div>
             ))}
           </div>
@@ -115,7 +138,7 @@ function TabInputs({
 }) {
   useEffect(() => {
     if (!id) {
-      console.log("ID is missing")
+      console.log("ID is missing");
     }
     if (!selectedFile) return;
 

@@ -188,12 +188,13 @@ function createWindow() {
               console.log(measureData)
               const measurementEntry = [
                 "\n--- New Measurement ---",
-                `Id: ${JSON.stringify(measureData.id_measures, null, 2)}`,
-                `data: ${measureData.date}`
+                `Idm: ${measureData.id_measure}`,
+                `Id: ${measureData.id}`,
                 `x1: ${measureData.x1}`,
                 `x2: ${measureData.x2}`,
                 `y1: ${measureData.y1}`,
-                `y2: ${measureData.y2}`
+                `y2: ${measureData.y2}`,
+                `data: ${new Date().toLocaleString("pl-PL", { hour12: false })}`
               ].join("\n");
 
 
@@ -212,6 +213,63 @@ function createWindow() {
       return { success: false, message: err.message };
     }
   });
+
+
+
+
+  ipcMain.handle("getMeasurementsFromFile", async (event, id) => {
+    console.log(id, "  co to jest")
+    try {
+      const basePath = path.join(__dirname, "tabs");
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
+
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+
+        const folderPath = path.join(basePath, folder.name);
+        const files = fs.readdirSync(folderPath);
+
+        for (const file of files) {
+          const filePath = path.join(folderPath, file);
+
+          if (file.endsWith(".txt")) {
+            const content = fs.readFileSync(filePath, "utf-8");
+
+
+            if (content.includes("Id:")) {
+              console.log("Znaleziono Id w pliku", filePath);
+              console.log(content);
+            }
+
+
+            if (content.includes(`Id: ${id}`)) {
+
+
+              const blocks = content.split("--- New Measurement ---").filter(Boolean);
+
+              const measurements = blocks.map((block) => {
+                const idm = block.match(/Idm:\s*(.*)/)?.[1]?.trim();
+                const measurementId = block.match(/Id:\s*(.*)/)?.[1]?.trim();
+                const date = block.match(/data:\s*(.*)/)?.[1]?.trim();
+                const x1 = parseFloat(block.match(/x1:\s*(-?\d+\.?\d*)/)?.[1]);
+                const y1 = parseFloat(block.match(/y1:\s*(-?\d+\.?\d*)/)?.[1]);
+                const x2 = parseFloat(block.match(/x2:\s*(-?\d+\.?\d*)/)?.[1]);
+                const y2 = parseFloat(block.match(/y2:\s*(-?\d+\.?\d*)/)?.[1]);
+                  return { idm, id: measurementId, date, x1, y1, x2, y2 };
+              }).filter(Boolean);
+
+              return { success: true, data: measurements };
+            }
+          }
+        }
+      }
+      return { success: false, message: "No data found for the given ID." };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: err.message };
+    }
+  });
+
 
 
 
