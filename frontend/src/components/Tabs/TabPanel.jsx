@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
 
-
-
 function TabPanel({
   setTabVisible,
   handleTabcard,
@@ -17,25 +15,20 @@ function TabPanel({
   const comparisons = measureState?.comparisons || null;
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
 
-
-
-
-
-    useEffect(() => {
-      if (id) {
-        window.electron.invoke("getMeasurementsFromFile", id).then((response) => {
-          console.log(id)
-          if (response.success) {
-            console.log(response)
-            setFileMeasurements(response.data);
-            console.log(response.data)
-          } else {
-            console.warn(response.message);
-          }
-        });
-      }
-    }, [id]);
-
+  useEffect(() => {
+    if (id) {
+      window.electron.invoke("getMeasurementsFromFile", id).then((response) => {
+        console.log(id);
+        if (response.success) {
+          console.log(response);
+          setFileMeasurements(response.data);
+          console.log(response.data);
+        } else {
+          console.warn(response.message);
+        }
+      });
+    }
+  }, [id]);
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -66,11 +59,9 @@ function TabPanel({
         </div>
         {fileMeasurments.length > 0 && (
           <div className="comparisons">
-            {fileMeasurments.map((item, index) => (
+            {fileMeasurments.slice(1).map((item, index) => (
               <div className="item" key={index}>
-                <h4>
-                  {index === 0 ? "Pomiar bazowy" : `Pomiar ${index + 1}`}:
-                </h4>
+                <h4>{`Pomiar ${index + 1}`}:</h4>
                 <p>
                   A = ({item.x1}, {item.y1})
                 </p>
@@ -107,6 +98,7 @@ function TabPanel({
         </div>
 
         <TabInputs
+          setFileMeasurements={setFileMeasurements}
           selectedFile={selectedFile}
           measurmentBase={measurmentBase}
           comparisons={comparisons}
@@ -135,6 +127,7 @@ function TabInputs({
   comparisons,
   measureTabData,
   id,
+  setFileMeasurements,
 }) {
   useEffect(() => {
     if (!id) {
@@ -169,6 +162,15 @@ function TabInputs({
             comparisons: [...comparisons, { ...newMeasurment, distance }],
           });
         }
+
+        setFileMeasurements((prevMeasurements) => {
+          if (
+            !prevMeasurements.some((item) => item.date === newMeasurment.date)
+          ) {
+            return [...prevMeasurements, newMeasurment];
+          }
+          return prevMeasurements;
+        });
       } else {
         console.log("Brak pomiarów");
       }
