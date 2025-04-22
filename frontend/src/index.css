@@ -386,3 +386,10 @@ h1 {
   right: 400px;
   top: -30px;
 }
+
+.comparisons .item{
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+
+}

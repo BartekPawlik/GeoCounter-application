@@ -9,6 +9,6 @@ contextBridge.exposeInMainWorld('electron', {
   getTabs: () => ipcRenderer.invoke('get-tabs'),
   deleteTab: (tabId) => ipcRenderer.invoke('delete-tabs', tabId),
   addMeasure: (measureData) => ipcRenderer.invoke('addMeasure', measureData),
+  deleteMeasure: (deleteMeasure) => ipcRenderer.invoke('deleteMeasure', deleteMeasure),
 });
-
 

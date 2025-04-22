@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { readUsers, writeUsers } = require("./fsUserHandler.js");
+const { isNull } = require("util");
 
 function getTabs() {
   try {
@@ -185,7 +186,27 @@ function createWindow() {
             const content = fs.readFileSync(filePath, "utf-8");
 
             if (content.includes(`Id: ${measureData.id}`)) {
-              console.log(measureData)
+              console.log(measureData);
+
+              // Sprawdzenie, czy w pliku już istnieje pomiar z tą samą datą
+              const regex = /data: (\d{2}\.\d{2}\.\d{4}, \d{2}:\d{2}:\d{2})/g;
+              const existingDates = [];
+              let match;
+              while ((match = regex.exec(content)) !== null) {
+                existingDates.push(match[1]); // Dodajemy wszystkie istniejące daty pomiarów
+              }
+
+              // Tworzymy datę nowego pomiaru
+              const newDate = new Date().toLocaleString("pl-PL", { hour12: false });
+
+              // Sprawdzamy, czy nowa data już istnieje w pliku
+              if (existingDates.includes(newDate)) {
+                console.log("Pomiar z tą samą datą już istnieje. Pomiar nie zostanie dodany.");
+                return { success: false, message: "Measurement with the same date already exists." };
+              }
+
+
+              // Tworzymy nowy wpis pomiaru
               const measurementEntry = [
                 "\n--- New Measurement ---",
                 `Idm: ${measureData.id_measure}`,
@@ -194,10 +215,10 @@ function createWindow() {
                 `x2: ${measureData.x2}`,
                 `y1: ${measureData.y1}`,
                 `y2: ${measureData.y2}`,
-                `data: ${new Date().toLocaleString("pl-PL", { hour12: false })}`
+                `data: ${newDate}`
               ].join("\n");
 
-
+              // Dopisujemy pomiar do pliku
               fs.appendFileSync(filePath, measurementEntry);
               console.log(`Measurement added to ${filePath}`);
 
@@ -217,8 +238,9 @@ function createWindow() {
 
 
 
+
   ipcMain.handle("getMeasurementsFromFile", async (event, id) => {
-    console.log(id, "  co to jest")
+    console.log(id)
     try {
       const basePath = path.join(__dirname, "tabs");
       const folders = fs.readdirSync(basePath, { withFileTypes: true });
@@ -248,7 +270,9 @@ function createWindow() {
               const blocks = content.split("--- New Measurement ---").filter(Boolean);
 
               const measurements = blocks.map((block) => {
-                const idm = block.match(/Idm:\s*(.*)/)?.[1]?.trim();
+                const idmMatch = block.match(/Idm:\s*(.*)/);
+                if(!idmMatch) return null
+                const idm = idmMatch[1]?.trim();
                 const measurementId = block.match(/Id:\s*(.*)/)?.[1]?.trim();
                 const date = block.match(/data:\s*(.*)/)?.[1]?.trim();
                 const x1 = parseFloat(block.match(/x1:\s*(-?\d+\.?\d*)/)?.[1]);
@@ -263,7 +287,73 @@ function createWindow() {
           }
         }
       }
-      return { success: false, message: "No data found for the given ID." };
+      return { success: false, message: "No data found for the given ID.", data: [] };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: err.message, data: [] };
+    }
+  });
+
+
+
+  // delete measurment from file
+
+  ipcMain.handle("deleteMeasure", async (event, id) => {
+    console.log(id)
+    try {
+      const basePath = path.join(__dirname, "tabs");
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
+
+      let delated = false;
+      let updateData = [];
+
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+
+        const folderPath = path.join(basePath, folder.name);
+        const files = fs.readdirSync(folderPath);
+
+        for (const file of files) {
+          const filePath = path.join(folderPath, file);
+
+          if (file.endsWith(".txt")) {
+            const content = fs.readFileSync(filePath, "utf-8");
+
+
+            if (content.includes("Idm:")) {
+              console.log("find Idm")
+              const blocks = content.split("--- New Measurement ---").filter(Boolean);
+
+              const updateBlocks = blocks.filter(block => {
+                const match = block.match(/Idm:\s*(.*)/);
+                const measurementId = match ? match[1].trim() : null
+                console.log(measurementId, "id z pliku")
+
+                if (!measurementId) return true
+                return measurementId !== id
+              })
+
+              if(updateBlocks.length !== blocks.length) {
+                delated = true
+                updateData = updateBlocks
+                const newContent = updateBlocks.map(b => b.trim()).join("\n--- New Measurement ---\n")
+                fs.writeFileSync(filePath, newContent, "utf-8" )
+              }
+
+
+
+            }
+
+
+          }
+        }
+      }
+
+      if(delated){
+        return { success: false, data: updateData };
+      }else{
+        return { success: false, message: "Measurment not found"};
+      }
     } catch (err) {
       console.error(err);
       return { success: false, message: err.message };

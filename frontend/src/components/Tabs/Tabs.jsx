@@ -31,12 +31,13 @@ function Tabs() {
   const [measureData, setMeasureData] = useState([]);
   const [archive, setArchive] = useState([]);
   const [archiveVisible, setArchiveVisible] = useState(false);
+  const [adduser, setAddUser] = useState(false)
 
 
 
   function updateTabData(tabId, data) {
     console.log("własnie powstał nowy pomiar");
-
+    setAddUser(true)
     setMeasureData((prev) => {
       const updatedTab = {
         ...prev[tabId],
@@ -60,6 +61,16 @@ function Tabs() {
           x2: lastComparison.x2,
           y2: lastComparison.y2,
           date: lastComparison.date,
+        });
+      }else{
+        window.electron.invoke("addMeasure", {
+          id: handleTabcard.id,
+          id_measure: uuidv4(),
+          x1: measurementBase.x1,
+          y1: measurementBase.y1,
+          x2: measurementBase.x2,
+          y2: measurementBase.y2,
+          date: measurementBase.date,
         });
       }
 
@@ -248,6 +259,9 @@ useEffect(() => {
           id={handleTabcard.id}
           handleExport={handleExport}
           deleteTitle={deleteTitle}
+          adduser={adduser}
+          setAddUser={setAddUser}
+
         />
       )}
     </div>

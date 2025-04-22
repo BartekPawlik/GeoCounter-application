@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
+import { TabInputs } from "./TabInputs";
 
 function TabPanel({
   setTabVisible,
@@ -8,32 +9,63 @@ function TabPanel({
   measureState,
   handleExoprt,
   id,
+  adduser,
+  setAddUser,
+
 }) {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [fileMeasurments, setFileMeasurements] = useState([]);
   const measurmentBase = measureState?.measurmentBase || null;
   const comparisons = measureState?.comparisons || null;
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [fileMeasurments, setFileMeasurements] = useState([])
+
 
   useEffect(() => {
-    if (id) {
+    if (adduser ||id) {
       window.electron.invoke("getMeasurementsFromFile", id).then((response) => {
-        console.log(id);
         if (response.success) {
-          console.log(response);
           setFileMeasurements(response.data);
-          console.log(response.data);
         } else {
           console.warn(response.message);
         }
+
+        // Po załadowaniu danych resetuj adduser
+        setAddUser(false);
       });
     }
-  }, [id]);
+  }, [adduser, id]);
+
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
+    }
+  }
+
+  function handleDelete() {
+    if (deleteId) {
+      console.log(deleteId);
+      window.electron
+        .invoke("deleteMeasure", deleteId)
+        .then((response) => {
+          if (response.success) {
+            console.log("win");
+            setFileMeasurements(response.data);
+          } else {
+            window.electron
+              .invoke("getMeasurementsFromFile", id)
+              .then((response) => {
+                setFileMeasurements(response.data);
+                console.log("bug");
+              });
+          }
+        })
+        .catch((err) => {
+          console.error("Error during deletion:", err); // Catch any unexpected errors
+        });
     }
   }
 
@@ -57,19 +89,32 @@ function TabPanel({
             Dodaj Pomiar
           </label>
         </div>
-        {fileMeasurments.length > 0 && (
+        {fileMeasurments?.length > 0 && (
           <div className="comparisons">
-            {fileMeasurments.slice(1).map((item, index) => (
-              <div className="item" key={index}>
-                <h4>{`Pomiar ${index + 1}`}:</h4>
-                <p>
-                  A = ({item.x1}, {item.y1})
-                </p>
-                <p>
-                  B = ({item.x2}, {item.y2})
-                </p>
-                {/* <p>Odległość od bazy: {item.id}</p> */}
-                <p>Data: {item.date}</p>
+            {fileMeasurments.map((item, index) => (
+              <div className="item" key={index} date-id={item.idm}>
+                <div>
+                  <h4>
+                    {index != 0 ? `Pomiar ${index + 1}` : `Pomiar bazowy`}:
+                  </h4>
+                  <p>
+                    A = ({item.x1}, {item.y1})
+                  </p>
+                  <p>
+                    B = ({item.x2}, {item.y2})
+                  </p>
+                  {/* <p>Odległość od bazy: {item.id}</p> */}
+                  <p>Data: {item.date}</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setDeleteId(item.idm);
+                    setShowDeleteConfirm(true);
+                  }}
+                >
+                  x
+                </button>
               </div>
             ))}
           </div>
@@ -88,7 +133,7 @@ function TabPanel({
           <p>{handleTabcard.date}</p>
 
           <h4>Pomiar bazowy:</h4>
-          {measurmentBase ? (
+          {measurmentBase && fileMeasurments ? (
             <p>
               A = ({measurmentBase.x1}, {measurmentBase.y1})
             </p>
@@ -106,10 +151,21 @@ function TabPanel({
           id={id}
         />
 
+        {showDeleteConfirm && (
+          <ConfirmationDialog
+            onConfirm={() => {
+              handleDelete();
+              setShowDeleteConfirm(false);
+            }}
+            onCancel={() => setShowDeleteConfirm(false)}
+            deleteTitle={`Czy na pewno chcesz usunąć pomiar`}
+          />
+        )}
+
         {showArchiveConfirm && (
           <ConfirmationDialog
             onConfirm={() => {
-              handleExoprt(id); // <-- Wywołujemy tylko, jeśli user potwierdzi
+              handleExoprt(id);
               setShowArchiveConfirm(false);
             }}
             onCancel={() => setShowArchiveConfirm(false)}
@@ -119,67 +175,6 @@ function TabPanel({
       </div>
     </div>
   );
-}
-
-function TabInputs({
-  selectedFile,
-  measurmentBase,
-  comparisons,
-  measureTabData,
-  id,
-  setFileMeasurements,
-}) {
-  useEffect(() => {
-    if (!id) {
-      console.log("ID is missing");
-    }
-    if (!selectedFile) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const text = e.target.result;
-      const regex =
-        /A=\((-?\d+\.?\d*),(-?\d+\.?\d*)\).*B=\((-?\d+\.?\d*),(-?\d+\.?\d*)\)/;
-      const match = text.match(regex);
-
-      if (match) {
-        const newMeasurment = {
-          x1: parseFloat(match[1]),
-          y1: parseFloat(match[2]),
-          x2: parseFloat(match[3]),
-          y2: parseFloat(match[4]),
-          date: new Date().toLocaleString("pl-PL", { hour12: false }),
-        };
-
-        if (!measurmentBase) {
-          measureTabData({ measurmentBase: newMeasurment, comparisons: [] });
-        } else {
-          const distance = Math.sqrt(
-            Math.pow(newMeasurment.x2 - measurmentBase.x1, 2) +
-              Math.pow(newMeasurment.y2 - measurmentBase.y1, 2)
-          );
-          measureTabData({
-            comparisons: [...comparisons, { ...newMeasurment, distance }],
-          });
-        }
-
-        setFileMeasurements((prevMeasurements) => {
-          if (
-            !prevMeasurements.some((item) => item.date === newMeasurment.date)
-          ) {
-            return [...prevMeasurements, newMeasurment];
-          }
-          return prevMeasurements;
-        });
-      } else {
-        console.log("Brak pomiarów");
-      }
-    };
-
-    reader.readAsText(selectedFile);
-  }, [selectedFile]);
-
-  return null;
 }
 
 export default TabPanel;

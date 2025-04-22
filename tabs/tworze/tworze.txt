@@ -2,52 +2,43 @@ Tab: tworze
 Date: 2025-04-08
 User: Peter
 Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
-
 --- New Measurement ---
-Idm: 4e06a3e4-010f-477c-af6e-66cbed996bad
+Idm: b8f0665e-bad8-49a0-97e1-25c2fe37d68f
 Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
 x1: -3.5
 x2: 6.1
 y1: 4.2
 y2: -2.8
-data: 16.04.2025, 19:46:43
+data: 21.04.2025, 19:50:43
 --- New Measurement ---
-Idm: 8b148007-6ac0-46d0-9d0a-448ce386f501
+Idm: d1a70d74-828c-451e-afd7-18b8611d4a32
+Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
+x1: -3.5
+x2: 3.1
+y1: 4.2
+y2: -1.8
+data: 21.04.2025, 19:51:24
+--- New Measurement ---
+Idm: dafd5e13-52d2-4ab4-a45f-1e0cac05397d
+Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
+x1: -3.5
+x2: 3.1
+y1: 4.2
+y2: -1.8
+data: 21.04.2025, 19:51:24
+--- New Measurement ---
+Idm: 52b36513-1b44-4cd3-82d3-34a9a60764bf
 Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
 x1: -3.5
 x2: 6.1
 y1: 4.2
 y2: -2.8
-data: 16.04.2025, 19:46:43
+data: 21.04.2025, 19:51:27
 --- New Measurement ---
-Idm: 21783dd8-6054-4569-a5cf-e1cf79656c4e
+Idm: 51bf48f8-9c10-4e7e-b027-a06ece8143eb
 Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
-x1: -1.5
+x1: -3.5
 x2: 6.1
-y1: 2.2
+y1: 4.2
 y2: -2.8
-data: 16.04.2025, 20:26:40
---- New Measurement ---
-Idm: cc0d412e-5de9-4bab-a533-4ecea15f641c
-Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
-x1: -1.5
-x2: 6.1
-y1: 2.2
-y2: -2.8
-data: 16.04.2025, 20:26:40
---- New Measurement ---
-Idm: bba4aefc-ea66-4f33-bdb8-b8ac8179fe09
-Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
-x1: -1.5
-x2: 6.1
-y1: 2.2
-y2: -2.8
-data: 16.04.2025, 20:34:23
---- New Measurement ---
-Idm: 07d13d98-6aa5-44e4-82bf-666b989518d7
-Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
-x1: -1.5
-x2: 6.1
-y1: 2.2
-y2: -2.8
-data: 16.04.2025, 20:34:23
+data: 21.04.2025, 19:51:27

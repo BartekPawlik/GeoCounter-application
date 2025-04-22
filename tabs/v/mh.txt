@@ -2,27 +2,6 @@ Tab: mh
 Date: 2025-04-08
 User: Bart
 Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
-
-
-
-
-
---- New Measurement ---
-Idm: 53db4a50-9a6a-42f5-8899-9ac36a5e1bdc
-Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
-x1: -3.5
-x2: 3.1
-y1: 4.2
-y2: -1.8
-data: 16.04.2025, 20:28:30
---- New Measurement ---
-Idm: b61f52cd-4026-4960-ae9a-d1838d890c76
-Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
-x1: -3.5
-x2: 3.1
-y1: 4.2
-y2: -1.8
-data: 16.04.2025, 20:28:30
 --- New Measurement ---
 Idm: a896f48a-004e-45ce-8677-88d9357e89cd
 Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
@@ -31,27 +10,3 @@ x2: 6.1
 y1: 4.2
 y2: -2.8
 data: 16.04.2025, 20:28:34
---- New Measurement ---
-Idm: 304de16c-8e8b-4d87-9cb9-95c36c615fd6
-Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
-x1: -3.5
-x2: 6.1
-y1: 4.2
-y2: -2.8
-data: 16.04.2025, 20:28:34
---- New Measurement ---
-Idm: 461314a4-3a06-45bd-837c-32384aca67fe
-Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
-x1: -3.5
-x2: 3.1
-y1: 4.2
-y2: -1.8
-data: 16.04.2025, 20:28:40
---- New Measurement ---
-Idm: 5ce6781a-01e6-45b3-8b6e-a70282469741
-Id: b8ad3fff-c8f8-4af5-9803-319b085f70c2
-x1: -3.5
-x2: 3.1
-y1: 4.2
-y2: -1.8
-data: 16.04.2025, 20:28:40
