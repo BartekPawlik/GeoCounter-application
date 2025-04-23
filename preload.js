@@ -10,5 +10,6 @@ contextBridge.exposeInMainWorld('electron', {
   deleteTab: (tabId) => ipcRenderer.invoke('delete-tabs', tabId),
   addMeasure: (measureData) => ipcRenderer.invoke('addMeasure', measureData),
   deleteMeasure: (deleteMeasure) => ipcRenderer.invoke('deleteMeasure', deleteMeasure),
+  moveFolder: (folderName, folderDate) => ipcRenderer.invoke("move-folder-to-archive", folderNam, folderDate),
 });
 

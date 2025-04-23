@@ -11,7 +11,8 @@ function TabPanel({
   id,
   adduser,
   setAddUser,
-
+  name,
+  date,
 }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const measurmentBase = measureState?.measurmentBase || null;
@@ -19,11 +20,11 @@ function TabPanel({
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [fileMeasurments, setFileMeasurements] = useState([])
+  const [fileMeasurments, setFileMeasurements] = useState([]);
 
 
   useEffect(() => {
-    if (adduser ||id) {
+    if (adduser || id) {
       window.electron.invoke("getMeasurementsFromFile", id).then((response) => {
         if (response.success) {
           setFileMeasurements(response.data);
@@ -36,7 +37,6 @@ function TabPanel({
       });
     }
   }, [adduser, id]);
-
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -73,7 +73,13 @@ function TabPanel({
     <div className="tab-panel-container">
       <div className="return-container">
         <button onClick={() => setTabVisible(false)}>Powrót</button>
-        <button onClick={() => setShowArchiveConfirm(true)}>Archiwizuj</button>
+        <button
+          onClick={() => {
+            setShowArchiveConfirm(true);
+          }}
+        >
+          Archiwizuj
+        </button>
       </div>
 
       <div className="measuring-container">
@@ -165,7 +171,8 @@ function TabPanel({
         {showArchiveConfirm && (
           <ConfirmationDialog
             onConfirm={() => {
-              handleExoprt(id);
+              console.log(name, "name of folder")
+              handleExoprt(name, date,);
               setShowArchiveConfirm(false);
             }}
             onCancel={() => setShowArchiveConfirm(false)}

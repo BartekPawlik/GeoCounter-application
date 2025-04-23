@@ -32,6 +32,8 @@ function Tabs() {
   const [archive, setArchive] = useState([]);
   const [archiveVisible, setArchiveVisible] = useState(false);
   const [adduser, setAddUser] = useState(false)
+  const name = handleTabcard?.title || ""
+  const folderDate = handleTabcard?.date || ""
 
 
 
@@ -110,6 +112,10 @@ useEffect(() => {
       }
     };
 
+    function confirmCancel(){
+      setIsConfirmDelete(false);
+    }
+
 
 
   function addNewTab(newTab) {
@@ -162,21 +168,36 @@ useEffect(() => {
     }
   };
 
-  function handleExport(data) {
-    console.log(archive);
-    const updatedTabContents = tabContents.filter(
-      (item) => !data.includes(item.id)
-    );
-    setTabVisible(false);
-    const exportedTabs = tabContents.filter((item) => data.includes(item.id));
-    setArchive((prev) => [...prev, exportedTabs]);
-    setTabContents(updatedTabContents);
-    localStorage.setItem("tabs", JSON.stringify(updatedTabContents));
-    localStorage.setItem(
-      "archive",
-      JSON.stringify([...archive, ...exportedTabs])
-    );
+ async function handleExport(data) {
+  console.log(name, "name");
+  console.log(folderDate, "date");
+
+  const response = await window.electron.invoke("move-folder-to-archive", name, folderDate );
+
+  if (response.success) {
+    console.log(response.message);
+  } else {
+    console.warn(response.message);
+    return;
   }
+
+
+  setTabVisible(false);
+
+
+  const updatedTabContents = tabContents.filter(
+    (item) => !data.includes(item.id)
+  );
+  const exportedTabs = tabContents.filter((item) => data.includes(item.id));
+
+  setArchive((prev) => [...prev, ...exportedTabs]);
+  setTabContents(updatedTabContents);
+
+
+  const updated = await window.electron.getTabs();
+  setTabContents(updated);
+}
+
 
   return (
     <div className="tabs-container">
@@ -245,7 +266,7 @@ useEffect(() => {
       {isConfirmDelete && !tabvisible && !userActive && !archiveVisible && (
         <ConfirmationDialog
           onConfirm={confirmDelete}
-          onCancel={confirmDelete}
+          onCancel={confirmCancel}
           deleteTitle={`Czy na pewno chcesz usunąć dokument "${deleteTitle}"?`}
         />
       )}
@@ -257,6 +278,8 @@ useEffect(() => {
           measureTabData={(data) => updateTabData(handleTabcard.id, data)}
           measureState={measureData[handleTabcard?.id] || {}}
           id={handleTabcard.id}
+          name={name}
+          date={folderDate}
           handleExport={handleExport}
           deleteTitle={deleteTitle}
           adduser={adduser}
