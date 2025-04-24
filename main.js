@@ -414,6 +414,35 @@ ipcMain.handle("move-folder-to-archive", async (event, data) => {
 });
 
 
+//  display archive tabs
+
+ipcMain.handle("archivefolders", async (event) => {
+  try {
+    const basePath = path.join(__dirname, "archive");
+    const folders = fs.readdirSync(basePath, { withFileTypes: true });
+
+    const folderNames = []
+
+    for (const folder of folders) {
+      if (!folder.isDirectory()) continue;
+      folderNames.push(folder.name)
+
+
+
+    }
+    return {
+      success: true,
+      message: "folders in UI",
+      data: folderNames,
+    };
+  } catch (err) {
+    console.error(err);
+    return { success: false, message: err.message, data: [] };
+  }
+});
+
+
+
 
 
   // Uncomment this line if you want to open DevTools automatically

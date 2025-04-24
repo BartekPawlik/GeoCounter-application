@@ -17,4 +17,5 @@ contextBridge.exposeInMainWorld("electron", {
       name,
       folderDate,
     }),
+    archivefolders: (name) => ipcRenderer.invoke("archivefolders"),
 });

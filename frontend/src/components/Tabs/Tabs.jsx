@@ -185,15 +185,16 @@ useEffect(() => {
   setTabVisible(false);
 
 
+
+
+
+  // setArchive((prev) => [...prev, ...exportedTabs])
+
+
   const updatedTabContents = tabContents.filter(
     (item) => !data.includes(item.id)
   );
-  const exportedTabs = tabContents.filter((item) => data.includes(item.id));
-
-  setArchive((prev) => [...prev, ...exportedTabs]);
   setTabContents(updatedTabContents);
-
-
   const updated = await window.electron.getTabs();
   setTabContents(updated);
 }
