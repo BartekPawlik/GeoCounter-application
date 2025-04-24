@@ -172,7 +172,7 @@ useEffect(() => {
   console.log(name, "name");
   console.log(folderDate, "date");
 
-  const response = await window.electron.invoke("move-folder-to-archive", name, folderDate );
+  const response = await window.electron.invoke("move-folder-to-archive", {name, folderDate} );
 
   if (response.success) {
     console.log(response.message);

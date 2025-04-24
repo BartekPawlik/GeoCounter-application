@@ -374,15 +374,16 @@ function createWindow() {
 //  move folder to archive
 
 
-ipcMain.handle("move-folder-to-archive", async (event, folderName, folderDate) => {
+ipcMain.handle("move-folder-to-archive", async (event, data) => {
+  const { name, folderDate } = data;
+  console.log(name, "folder name");
+  console.log(folderDate, "folder date");
   try {
     const tabsDir = path.join(__dirname, "tabs");
     console.log(tabsDir)
-    const folderPath = path.join(tabsDir, folderName);
+    const folderPath = path.join(tabsDir, name);
     console.log(folderPath)
     const archiveRoot = path.join(__dirname, "archive")
-    console.log(folderDate, "data dla folderdate")
-    console.log(folderName, "data dla folderName")
 
 
     if (!fs.existsSync(folderPath)) {
@@ -398,7 +399,7 @@ ipcMain.handle("move-folder-to-archive", async (event, folderName, folderDate) =
 
     await fs.ensureDir(archivePath)
 
-    const archiveFolder = path.join(archivePath, folderName);
+    const archiveFolder = path.join(archivePath, name);
 
 
 
