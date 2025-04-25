@@ -238,6 +238,11 @@ h1 {
   gap: 20px;
 }
 
+.archive-container .return-container{
+  display: flex;
+  gap: 10px;
+}
+
 .measuring-container {
   margin-top: 50px;
   width: 200px;
@@ -401,12 +406,72 @@ h1 {
   align-items: center;
   background-color: #f0efd4;
   border-radius: 10px;
+  transition: 0.1s ease-in-out;
 }
 
 .tab-list-archive {
   margin-top: 40px;
-
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 30px;
+  cursor: pointer;
+}
+
+.archive-container-card:hover{
+  transform: scale(1.05);
+}
+
+.archive-container-card:hover span{
+ filter: brightness(1.2);
+}
+
+.tab-list-archive  h3{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tab-container-archive{
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.tab-container-archive .tab-item{
+  height: 100px;
+  width: 160px;
+  background: #e7e3bf;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.tab-container-archive .tab-item:hover{
+ background-color: #d7d8d0;
+}
+
+.tab-container-archive .tab-item p {
+  width: 100%;
+  text-wrap: wrap;
+  font-size: 14px;
+}
+
+.tab-container-archive .tab-item .name{
+  color: rgb(139, 56, 74);
+  font-weight: 700;
+  margin-bottom: 3px;
+  margin-top: 2px;
+}
+
+.tab-container-archive .tab-item .date{
+  color: #0d459b;
+  font-weight: 700;
+  margin-bottom: 3px;
+  margin-top: 2px;
+}
+.tab-container-archive .tab-item p{
+  font-weight: 600;
 }

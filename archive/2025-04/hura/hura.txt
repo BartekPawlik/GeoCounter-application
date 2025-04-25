@@ -1,0 +1,12 @@
+Tab: hura
+Date: 2025-04-01
+User: siemano
+Id: 407015ab-fa8e-41b6-b7d6-87ec8615d1f2
+--- New Measurement ---
+Idm: ab0ffe31-1349-4b6c-9533-de220bfcd046
+Id: 407015ab-fa8e-41b6-b7d6-87ec8615d1f2
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 25.04.2025, 19:52:42

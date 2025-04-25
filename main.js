@@ -371,79 +371,88 @@ function createWindow() {
     }
   });
 
-//  move folder to archive
+  //  move folder to archive
 
+  ipcMain.handle("move-folder-to-archive", async (event, data) => {
+    const { name, folderDate } = data;
+    console.log(name, "folder name");
+    console.log(folderDate, "folder date");
+    try {
+      const tabsDir = path.join(__dirname, "tabs");
+      console.log(tabsDir);
+      const folderPath = path.join(tabsDir, name);
+      console.log(folderPath);
+      const archiveRoot = path.join(__dirname, "archive");
 
-ipcMain.handle("move-folder-to-archive", async (event, data) => {
-  const { name, folderDate } = data;
-  console.log(name, "folder name");
-  console.log(folderDate, "folder date");
-  try {
-    const tabsDir = path.join(__dirname, "tabs");
-    console.log(tabsDir)
-    const folderPath = path.join(tabsDir, name);
-    console.log(folderPath)
-    const archiveRoot = path.join(__dirname, "archive")
+      if (!fs.existsSync(folderPath)) {
+        return { success: false, message: "Folder not found" };
+      }
 
+      const dateObj = new Date(folderDate);
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const archiveMonthFolder = `${year}-${month}`;
 
-    if (!fs.existsSync(folderPath)) {
-      return { success: false, message: "Folder not found" };
+      const archivePath = path.join(archiveRoot, archiveMonthFolder);
+
+      await fs.ensureDir(archivePath);
+
+      const archiveFolder = path.join(archivePath, name);
+
+      await fs.move(folderPath, archiveFolder);
+
+      return {
+        success: true,
+        message: `Folder przeniesiony do ${archiveFolder}`,
+      };
+    } catch (err) {
+      console.error("Error moving folder:", err);
+      return { success: false, message: err.message };
     }
+  });
 
-    const dateObj = new Date(folderDate);
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const archiveMonthFolder = `${year}-${month}`;
+  //  display archive tabs
 
-    const archivePath= path.join(archiveRoot, archiveMonthFolder);
+  ipcMain.handle("archivefolders", async (event) => {
+    try {
+      const basePath = path.join(__dirname, "archive");
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
 
-    await fs.ensureDir(archivePath)
+      const folderNames = [];
 
-    const archiveFolder = path.join(archivePath, name);
-
-
-
-
-    await fs.move(folderPath, archiveFolder);
-
-    return { success: true, message: `Folder przeniesiony do ${archiveFolder}` };
-  } catch (err) {
-    console.error("Error moving folder:", err);
-    return { success: false, message: err.message };
-  }
-});
-
-
-//  display archive tabs
-
-ipcMain.handle("archivefolders", async (event) => {
-  try {
-    const basePath = path.join(__dirname, "archive");
-    const folders = fs.readdirSync(basePath, { withFileTypes: true });
-
-    const folderNames = []
-
-    for (const folder of folders) {
-      if (!folder.isDirectory()) continue;
-      folderNames.push(folder.name)
-
-
-
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+        folderNames.push(folder.name);
+      }
+      return {
+        success: true,
+        message: "folders in UI",
+        data: folderNames,
+      };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: err.message, data: [] };
     }
-    return {
-      success: true,
-      message: "folders in UI",
-      data: folderNames,
-    };
-  } catch (err) {
-    console.error(err);
-    return { success: false, message: err.message, data: [] };
-  }
-});
+  });
 
+  ipcMain.handle("archivePlaceData", async (event, folderName) => {
+    try {
+      const basePath = path.join(__dirname, "archive", folderName);
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
+      const subFolders = folders
+        .filter((item) => item.isDirectory())
+        .map((item) => item.name);
 
-
-
+      return {
+        success: true,
+        message: "folders in UI",
+        data: subFolders,
+      };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: err.message, data: [] };
+    }
+  });
 
   // Uncomment this line if you want to open DevTools automatically
   win.webContents.openDevTools();
