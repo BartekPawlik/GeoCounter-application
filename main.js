@@ -375,11 +375,9 @@ function createWindow() {
 
   ipcMain.handle("move-folder-to-archive", async (event, data) => {
     const { name, folderDate } = data;
-    console.log(name, "folder name");
-    console.log(folderDate, "folder date");
     try {
       const tabsDir = path.join(__dirname, "tabs");
-      console.log(tabsDir);
+      // console.log(tabsDir);
       const folderPath = path.join(tabsDir, name);
       console.log(folderPath);
       const archiveRoot = path.join(__dirname, "archive");
@@ -437,22 +435,67 @@ function createWindow() {
 
   ipcMain.handle("archivePlaceData", async (event, folderName) => {
     try {
+      let firstTxtFile = null;
+      const folderData = [];
       const basePath = path.join(__dirname, "archive", folderName);
+      console.log(basePath);
+
       const folders = fs.readdirSync(basePath, { withFileTypes: true });
       const subFolders = folders
         .filter((item) => item.isDirectory())
         .map((item) => item.name);
 
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+
+        // Check if the current folder name matches the folderName passed
+        console.log(folderName)
+        console.log(folder.name, "folder.name")
+
+          console.log(" jak jesy rowne")
+          const folderPath = path.join(basePath, folder.name);
+          const files = fs.readdirSync(folderPath);
+
+          // Look for the first .txt file
+          for (const file of files) {
+            const filePath = path.join(folderPath, file);
+            if (file.endsWith(".txt")) {
+
+              firstTxtFile = fs.readFileSync(filePath, "utf-8");
+              break; // Stop after reading the first .txt file
+            }
+          }
+
+          // If we found a .txt file, extract Id and Date
+          if (firstTxtFile) {
+            const idMatch = firstTxtFile.match(/Id:\s*(\S+)/);
+            const dateMatch = firstTxtFile.match(/Date:\s*(\S+)/);
+
+            const id = idMatch ? idMatch[1] : null;
+            const date = dateMatch ? dateMatch[1] : null;
+
+
+
+            folderData.push({
+              foldername: folder.name,
+              id: id,
+              date: date,
+              content: firstTxtFile,
+            });
+          }
+
+      }
       return {
         success: true,
         message: "folders in UI",
-        data: subFolders,
+        data: folderData,
       };
     } catch (err) {
       console.error(err);
       return { success: false, message: err.message, data: [] };
     }
   });
+
 
   // Uncomment this line if you want to open DevTools automatically
   win.webContents.openDevTools();

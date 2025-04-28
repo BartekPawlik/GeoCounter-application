@@ -2,3 +2,19 @@ Tab: eee
 Date: 2025-04-02
 User: Peter
 Id: 8ffb3fe6-75c7-4770-8eb9-0f5ce0d8dbde
+--- New Measurement ---
+Idm: b8f0665e-bad8-49a0-97e1-25c2fe37d68f
+Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 21.04.2025, 19:50:43
+--- New Measurement ---
+Idm: d1a70d74-828c-451e-afd7-18b8611d4a32
+Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
+x1: -3.5
+x2: 3.1
+y1: 4.2
+y2: -1.8
+data: 21.04.2025, 19:51:24

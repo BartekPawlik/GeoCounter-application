@@ -2,3 +2,11 @@ Tab: sdsdsdsdgh
 Date: 2025-04-01
 User: baxon
 Id: 7d910ea6-92a2-4f62-b86d-fc77777298e2
+--- New Measurement ---
+Idm: 51bf48f8-9c10-4e7e-b027-a06ece8143eb
+Id: e76bf245-ed48-4f84-9582-d6e21e1dd121
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 21.04.2025, 19:51:27

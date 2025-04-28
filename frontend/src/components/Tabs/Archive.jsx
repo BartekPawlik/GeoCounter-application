@@ -24,8 +24,13 @@ function Archive({ archiveVisible }) {
   }, [archiveVisible]);
 
   const getArchivedFolder = async () => {
+    if(!folderName){
+      console.error("foldername is empty")
+      return;
+    }
     const result = await window.electron.archivePlaceData(folderName);
     setUpdateFolder(false)
+    console.log(result, "results")
     if (result.success) {
       // console.log("Folders:", result.data);
       // Możesz teraz wyświetlić np. w stanie Reacta
@@ -57,7 +62,7 @@ function Archive({ archiveVisible }) {
   function handleArchiveTab(name) {
     setFolderName(name);
     console.log("hey");
-    console.log();
+    console.log(name);
     setMonthDisplay(true);
     setUpdateFolder(true)
 
@@ -78,10 +83,9 @@ function Archive({ archiveVisible }) {
         {!monthDisplay && (
           <div className="tab-list-archive">
             {folders.map((folder, index) => {
-              console.log(folders);
               const monthNumber = parseInt(folder.split("-")[1]);
               const month = months.find((m) => m.number === monthNumber);
-              console.log(month);
+
 
               return (
                 <div

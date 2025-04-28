@@ -475,3 +475,14 @@ h1 {
 .tab-container-archive .tab-item p{
   font-weight: 600;
 }
+.archive-txt-container{
+  display: flex;
+  gap: 200px;
+}
+
+.archive-txt-container .txt-container{
+  display: flex;
+  background-color: #b4b7b9;
+  width: 600px;
+
+}
