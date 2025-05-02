@@ -449,41 +449,37 @@ function createWindow() {
         if (!folder.isDirectory()) continue;
 
         // Check if the current folder name matches the folderName passed
-        console.log(folderName)
-        console.log(folder.name, "folder.name")
+        console.log(folderName);
+        console.log(folder.name, "folder.name");
 
-          console.log(" jak jesy rowne")
-          const folderPath = path.join(basePath, folder.name);
-          const files = fs.readdirSync(folderPath);
+        console.log(" jak jesy rowne");
+        const folderPath = path.join(basePath, folder.name);
+        const files = fs.readdirSync(folderPath);
 
-          // Look for the first .txt file
-          for (const file of files) {
-            const filePath = path.join(folderPath, file);
-            if (file.endsWith(".txt")) {
-
-              firstTxtFile = fs.readFileSync(filePath, "utf-8");
-              break; // Stop after reading the first .txt file
-            }
+        // Look for the first .txt file
+        for (const file of files) {
+          const filePath = path.join(folderPath, file);
+          if (file.endsWith(".txt")) {
+            firstTxtFile = fs.readFileSync(filePath, "utf-8");
+            break; // Stop after reading the first .txt file
           }
+        }
 
-          // If we found a .txt file, extract Id and Date
-          if (firstTxtFile) {
-            const idMatch = firstTxtFile.match(/Id:\s*(\S+)/);
-            const dateMatch = firstTxtFile.match(/Date:\s*(\S+)/);
+        // If we found a .txt file, extract Id and Date
+        if (firstTxtFile) {
+          const idMatch = firstTxtFile.match(/Id:\s*(\S+)/);
+          const dateMatch = firstTxtFile.match(/Date:\s*(\S+)/);
 
-            const id = idMatch ? idMatch[1] : null;
-            const date = dateMatch ? dateMatch[1] : null;
+          const id = idMatch ? idMatch[1] : null;
+          const date = dateMatch ? dateMatch[1] : null;
 
-
-
-            folderData.push({
-              foldername: folder.name,
-              id: id,
-              date: date,
-              content: firstTxtFile,
-            });
-          }
-
+          folderData.push({
+            foldername: folder.name,
+            id: id,
+            date: date,
+            content: firstTxtFile,
+          });
+        }
       }
       return {
         success: true,
@@ -496,6 +492,96 @@ function createWindow() {
     }
   });
 
+  ipcMain.handle("archiveTxt", async (event, folderId, folderName) => {
+    try {
+      const folderData = [];
+      const basePath = path.join(__dirname, "archive", folderName);
+      console.log(basePath);
+
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
+
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+
+        const folderPath = path.join(basePath, folder.name);
+        const files = fs.readdirSync(folderPath);
+
+        // Look for the first .txt file
+        for (const file of files) {
+          if(path.extname(file) !== ".txt") continue
+          const filePath = path.join(folderPath, file);
+          const content = fs.readFileSync(filePath, "utf8")
+          const idMatch = content.match(/Id:\s*(\S+)/);
+          // const dateMatch = content.match(/Date:\s*(\S+)/);
+
+
+          if (idMatch && idMatch[1] === folderId) {
+          console.log(content, "content")
+
+            folderData.push({
+              content: content,
+            });
+          }
+        }
+
+        // If we found a .txt file, extract Id and Date
+      }
+      return {
+        success: true,
+        message: "folders in UI",
+        data: folderData,
+      };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: err.message, data: [] };
+    }
+  });
+
+
+
+
+  ipcMain.handle("updateTxt", async (event, folderId, folderName, folderData)  => {
+    try {
+      const uploadFiles = [];
+      const basePath = path.join(__dirname, "archive", folderName);
+      console.log(basePath);
+
+      const folders = fs.readdirSync(basePath, { withFileTypes: true });
+
+      for (const folder of folders) {
+        if (!folder.isDirectory()) continue;
+
+        const folderPath = path.join(basePath, folder.name);
+        const files = fs.readdirSync(folderPath);
+
+        // Look for the first .txt file
+        for (const file of files) {
+          if(path.extname(file) !== ".txt") continue
+          const filePath = path.join(folderPath, file);
+          const content = fs.readFileSync(filePath, "utf8")
+          const idMatch = content.match(/Id:\s*(\S+)/);
+
+          if (idMatch && idMatch[1] === folderId) {
+            fs.writeFileSync(filePath, folderData.content, "utf8")
+
+            uploadFiles.push({
+              content: folderData.content,
+            });
+          }
+        }
+
+        // If we found a .txt file, extract Id and Date
+      }
+      return {
+        success: true,
+        message: "folders in UI",
+        data: uploadFiles,
+      };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: err.message, data: [] };
+    }
+  });
 
   // Uncomment this line if you want to open DevTools automatically
   win.webContents.openDevTools();

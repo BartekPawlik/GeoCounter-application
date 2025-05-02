@@ -2,3 +2,19 @@ Tab: takl
 Date: 2025-04-28
 User: Peter
 Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
+--- New Measurement ---
+Idm: 54db8cf1-b4eb-46f1-a173-d6caedfebeea
+Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 30.04.2025, 21:26:24
+--- New Measurement ---
+Idm: c848075b-e6c7-46fa-b16e-61ef3726c54c
+Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 30.04.2025, 21:26:25

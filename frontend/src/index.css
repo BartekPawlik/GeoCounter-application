@@ -484,5 +484,12 @@ h1 {
   display: flex;
   background-color: #b4b7b9;
   width: 600px;
+}
 
+.archive-txt-container .txt-container textarea{
+  width: 600px;
+}
+
+.update-button{
+  height: 50px;
 }
