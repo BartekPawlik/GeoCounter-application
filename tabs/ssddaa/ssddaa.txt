@@ -2,3 +2,19 @@ Tab: ssddaa
 Date: 2025-04-29
 User: baxon
 Id: d8c4f001-a3fa-46a0-97fa-18cbe62c5eb6
+--- New Measurement ---
+Idm: 0e641cfc-40fc-43b6-bc80-dd0173c66976
+Id: d8c4f001-a3fa-46a0-97fa-18cbe62c5eb6
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 4.05.2025, 16:50:58
+--- New Measurement ---
+Idm: 5269312c-ce5b-4d76-bcea-18fe33c26715
+Id: d8c4f001-a3fa-46a0-97fa-18cbe62c5eb6
+x1: -3.5
+x2: 6.1
+y1: 4.2
+y2: -2.8
+data: 4.05.2025, 16:55:32

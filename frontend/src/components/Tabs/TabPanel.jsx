@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ConfirmationDialog from "../UI/ConfirmationDialog";
 import { TabInputs } from "./TabInputs";
+import { ChartWindown } from "./ChartWindown";
 
 function TabPanel({
   setTabVisible,
@@ -21,22 +22,26 @@ function TabPanel({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [fileMeasurments, setFileMeasurements] = useState([]);
-
+  const [deleteFlag, setdeleteFlag] = useState(false);
+  const [chartOpen, setChartOpen] = useState(false);
+  const [chartItem, setChartItem] = useState()
 
   useEffect(() => {
-    if (adduser || id) {
+    if (adduser || id || deleteFlag) {
       window.electron.invoke("getMeasurementsFromFile", id).then((response) => {
         if (response.success) {
           setFileMeasurements(response.data);
+          console.log("file measurment", fileMeasurments);
         } else {
           console.warn(response.message);
         }
 
         // Po załadowaniu danych resetuj adduser
         setAddUser(false);
+        setdeleteFlag(false);
       });
     }
-  }, [adduser, id]);
+  }, [adduser, id, deleteFlag]);
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -51,23 +56,21 @@ function TabPanel({
       window.electron
         .invoke("deleteMeasure", deleteId)
         .then((response) => {
-          if (response.success) {
-            console.log("win");
-            setFileMeasurements(response.data);
-          } else {
-            window.electron
-              .invoke("getMeasurementsFromFile", id)
-              .then((response) => {
-                setFileMeasurements(response.data);
-                console.log("bug");
-              });
-          }
+          setdeleteFlag(true);
         })
         .catch((err) => {
           console.error("Error during deletion:", err); // Catch any unexpected errors
         });
     }
   }
+
+
+
+  function handleChart(item) {
+    setChartItem(item)
+  }
+
+
 
   return (
     <div className="tab-panel-container">
@@ -99,7 +102,12 @@ function TabPanel({
           <div className="comparisons">
             {fileMeasurments.map((item, index) => (
               <div className="item" key={index} date-id={item.idm}>
-                <div>
+                <div
+                  onClick={() => {
+                    handleChart(item);
+                    setChartOpen(true);
+                  }}
+                >
                   <h4>
                     {index != 0 ? `Pomiar ${index + 1}` : `Pomiar bazowy`}:
                   </h4>
@@ -139,9 +147,9 @@ function TabPanel({
           <p>{handleTabcard.date}</p>
 
           <h4>Pomiar bazowy:</h4>
-          {measurmentBase && fileMeasurments ? (
+          {fileMeasurments.length > 0 && fileMeasurments[0] ? (
             <p>
-              A = ({measurmentBase.x1}, {measurmentBase.y1})
+              A = ({fileMeasurments[0].x1}, {fileMeasurments[0].y1})
             </p>
           ) : (
             <p>brak danych</p>
@@ -171,13 +179,17 @@ function TabPanel({
         {showArchiveConfirm && (
           <ConfirmationDialog
             onConfirm={() => {
-              console.log(name, "name of folder")
-              handleExoprt(name, date,);
+              console.log(name, "name of folder");
+              handleExoprt(name, date);
               setShowArchiveConfirm(false);
             }}
             onCancel={() => setShowArchiveConfirm(false)}
             deleteTitle={`Czy na pewno chcesz zarchiwizować dokument?`}
           />
+        )}
+
+        {chartOpen && (
+         <ChartWindown chartItem={chartItem} />
         )}
       </div>
     </div>
@@ -185,3 +197,4 @@ function TabPanel({
 }
 
 export default TabPanel;
+

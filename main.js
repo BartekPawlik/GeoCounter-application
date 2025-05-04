@@ -183,7 +183,13 @@ function createWindow() {
           if (file.endsWith(".txt")) {
             const content = fs.readFileSync(filePath, "utf-8");
 
+
+
+
             if (content.includes(`Id: ${measureData.id}`)) {
+
+
+
               console.log(measureData);
 
               // Sprawdzenie, czy w pliku już istnieje pomiar z tą samą datą
@@ -221,6 +227,14 @@ function createWindow() {
                 `y2: ${measureData.y2}`,
                 `data: ${newDate}`,
               ].join("\n");
+
+              if (content.includes(`data: ${newDate}`)) {
+                console.log("Pomiar z tą samą datą już istnieje.");
+                return {
+                  success: false,
+                  message: "Measurement with the same date already exists.",
+                };
+              }
 
               // Dopisujemy pomiar do pliku
               fs.appendFileSync(filePath, measurementEntry);

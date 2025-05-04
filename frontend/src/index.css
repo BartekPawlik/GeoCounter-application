@@ -233,12 +233,12 @@ h1 {
   position: relative;
 }
 
-.tab-panel-container .return-container{
+.tab-panel-container .return-container {
   display: flex;
   gap: 20px;
 }
 
-.archive-container .return-container{
+.archive-container .return-container {
   display: flex;
   gap: 10px;
 }
@@ -351,11 +351,12 @@ h1 {
   min-height: 100px;
 }
 
- .user-list p {
+.user-list p {
   display: flex;
   font-weight: 600;
 }
-.user-list{
+
+.user-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -370,7 +371,7 @@ h1 {
   border-radius: 10px;
 }
 
-.user-list .user-container button{
+.user-list .user-container button {
   width: 20px;
   height: 20px;
   margin: 0;
@@ -379,7 +380,7 @@ h1 {
   justify-content: center;
 }
 
-.users-container .user-box{
+.users-container .user-box {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -387,18 +388,18 @@ h1 {
 
 
 
-.tab-item .confirmation-dialog{
+.tab-item .confirmation-dialog {
   right: 400px;
   top: -30px;
 }
 
-.comparisons .item{
+.comparisons .item {
   display: flex;
   flex-direction: row;
   align-items: start;
 }
 
-.archive-container-card{
+.archive-container-card {
   width: 150px;
   height: 150px;
   display: flex;
@@ -417,27 +418,29 @@ h1 {
   cursor: pointer;
 }
 
-.archive-container-card:hover{
+.archive-container-card:hover {
   transform: scale(1.05);
 }
 
-.archive-container-card:hover span{
- filter: brightness(1.2);
+.archive-container-card:hover span {
+  filter: brightness(1.2);
 }
 
-.tab-list-archive  h3{
+.tab-list-archive h3 {
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.tab-container-archive{
+
+.tab-container-archive {
   gap: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-.tab-container-archive .tab-item{
+
+.tab-container-archive .tab-item {
   height: 100px;
   width: 160px;
   background: #e7e3bf;
@@ -449,8 +452,8 @@ h1 {
   cursor: pointer;
 }
 
-.tab-container-archive .tab-item:hover{
- background-color: #d7d8d0;
+.tab-container-archive .tab-item:hover {
+  background-color: #d7d8d0;
 }
 
 .tab-container-archive .tab-item p {
@@ -459,37 +462,128 @@ h1 {
   font-size: 14px;
 }
 
-.tab-container-archive .tab-item .name{
+.tab-container-archive .tab-item .name {
   color: rgb(139, 56, 74);
   font-weight: 700;
   margin-bottom: 3px;
   margin-top: 2px;
 }
 
-.tab-container-archive .tab-item .date{
+.tab-container-archive .tab-item .date {
   color: #0d459b;
   font-weight: 700;
   margin-bottom: 3px;
   margin-top: 2px;
 }
-.tab-container-archive .tab-item p{
+
+.tab-container-archive .tab-item p {
   font-weight: 600;
 }
-.archive-txt-container{
+
+.archive-txt-container {
   display: flex;
   gap: 200px;
 }
 
-.archive-txt-container .txt-container{
+.archive-txt-container .txt-container {
   display: flex;
   background-color: #b4b7b9;
   width: 600px;
 }
 
-.archive-txt-container .txt-container textarea{
+.archive-txt-container .txt-container textarea {
   width: 600px;
 }
 
-.update-button{
+.update-button {
   height: 50px;
+}
+
+.chart-container {
+  margin-top: 50px;
+  margin-left: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.main-measure {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+}
+
+.main-measure p {
+  font-weight: 600;
+}
+
+.chart {
+  margin-top: 30px;
+  border: 1px solid black;
+  width: 600px;
+  height: 600px;
+  position: relative;
+}
+
+.x-line-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+.y-line-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translatey(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.y-line {
+  height: 500px;
+  width: 2px;
+  background-color: black;
+}
+
+.x-line {
+  width: 500px;
+  height: 2px;
+  background-color: black;
+}
+
+.x-line-container img {
+  margin: 3px;
+}
+
+/* .y-line-container img {
+  transform: translateX(-10px);
+} */
+
+.point {
+  position: absolute;
+  background-color: red;
+  color: wheat;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  transform: translate(-50%, -50%);
+}
+
+.x-number {
+  display: flex;
+  position: absolute;
+  gap: 15px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-52.1%, -40%);
 }

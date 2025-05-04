@@ -3,18 +3,34 @@ Date: 2025-04-28
 User: Peter
 Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
 --- New Measurement ---
-Idm: 54db8cf1-b4eb-46f1-a173-d6caedfebeea
+Idm: 9a135819-fdbc-4930-b486-cf4135258f73
 Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
 x1: -3.5
 x2: 6.1
 y1: 4.2
 y2: -2.8
-data: 30.04.2025, 21:26:24
+data: 4.05.2025, 16:44:18
 --- New Measurement ---
-Idm: c848075b-e6c7-46fa-b16e-61ef3726c54c
+Idm: 2ffdec45-33af-4d26-bd80-b34e8ed8fbd7
+Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
+x1: -3.5
+x2: 3.1
+y1: 4.2
+y2: -1.8
+data: 4.05.2025, 16:50:42
+--- New Measurement ---
+Idm: 79257e80-f800-4fa2-a6fe-e192bcd45aa8
 Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
 x1: -3.5
 x2: 6.1
 y1: 4.2
 y2: -2.8
-data: 30.04.2025, 21:26:25
+data: 4.05.2025, 16:50:46
+--- New Measurement ---
+Idm: 57db6abf-28a2-4c2d-84a9-1b976f8cc7ca
+Id: a913b6de-4bbe-417d-b158-27cd85fbdb84
+x1: -3.5
+x2: 3.1
+y1: 4.2
+y2: -1.8
+data: 4.05.2025, 16:50:52
